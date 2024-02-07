@@ -89,7 +89,7 @@ function eventMessage(event) {
       messageboard.innerText = "Game Over! Come back tomorrow.";
       break;
     case "win":
-      messageboard.style.color = "#c3e88d";
+      messageboard.style.color = "green";
       messageboard.innerText = "You win! Come back tomorrow.";
       break;
     case "valid":
