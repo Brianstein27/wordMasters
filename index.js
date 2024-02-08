@@ -138,7 +138,6 @@ function evaluate() {
   for (let i = 0; i < buffer.length; i++) {
     if (scoreboard.children[count].children[i].classList.contains("right")) {
       winCount++;
-      console.log(winCount);
     }
   }
   if (winCount === 5) {
