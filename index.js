@@ -2,6 +2,7 @@ let buffer = "";
 let count = 0;
 
 let wordOfTheDay = "";
+let map = "";
 
 const wordOfTheDayAPI = "https://words.dev-apis.com/word-of-the-day";
 const wordAPI = "https://words.dev-apis.com/validate-word";
@@ -43,6 +44,7 @@ function backspace() {
 }
 
 function enter() {
+  map = makeMap(wordOfTheDay);
   checkValidity(buffer).then(function (response) {
     if (response.validWord) {
       compareWords();
@@ -105,25 +107,29 @@ function compareWords() {
     // exact match
     if (buffer[i].toUpperCase() === wordOfTheDay[i].toUpperCase()) {
       scoreboard.children[count].children[i].classList.add("right");
-    } else {
-      for (let j = 0; j < buffer.length; j++) {
-        // close match
-        if (buffer[i].toUpperCase() === wordOfTheDay[j].toUpperCase()) {
-          scoreboard.children[count].children[i].classList.add("close");
-        }
-      }
+      map[buffer[i]]--;
     }
   }
-  // no match
+  // close match
   for (let i = 0; i < buffer.length; i++) {
-    if (
-      scoreboard.children[count].children[i].classList.contains("right") !=
-        true &&
-      scoreboard.children[count].children[i].classList.contains("close") != true
-    ) {
+    if (buffer[i].toUpperCase() === wordOfTheDay[i].toUpperCase()) {
+      // do nothing
+    } else if (map[buffer[i]] && map[buffer[i]] > 0) {
+      scoreboard.children[count].children[i].classList.add("close");
+      map[buffer[i]]--;
+    } else {
+      // no match
       scoreboard.children[count].children[i].classList.add("wrong");
     }
   }
+  // for (let i = 0; i < buffer.length; i++) {
+  //   if (
+  //     scoreboard.children[count].children[i].classList.contains("right") !=
+  //       true &&
+  //     scoreboard.children[count].children[i].classList.contains("close") != true
+  //   ) {
+  //   }
+  // }
 }
 
 // check winning condition
@@ -144,4 +150,16 @@ function evaluate() {
       }
     });
   }
+}
+
+function makeMap(array) {
+  const obj = {};
+  for (let i = 0; i < array.length; i++) {
+    if (obj[array[i]]) {
+      obj[array[i]]++;
+    } else {
+      obj[array[i]] = 1;
+    }
+  }
+  return obj;
 }
